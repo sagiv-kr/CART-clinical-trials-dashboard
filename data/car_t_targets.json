@@ -1,0 +1,185 @@
+{
+  "_comment": "Curated CAR-T reference file. For every target antigen we keep two lists: 'antigen_names' = how the antigen itself is written inside an intervention text (only used when the intervention already looks like a CAR-T), 'products' = names of real CAR-T products, brand names and investigational codes that do not always mention the antigen.",
+
+  "CD19": {
+    "antigen_names": ["CD19"],
+    "products": [
+      "tisagenlecleucel", "Kymriah", "CTL019",
+      "axicabtagene ciloleucel", "Yescarta", "KTE-C19",
+      "brexucabtagene autoleucel", "Tecartus", "KTE-X19",
+      "lisocabtagene maraleucel", "Breyanzi", "JCAR017", "liso-cel",
+      "obecabtagene autoleucel", "Aucatzyl", "obe-cel", "AUTO1",
+      "relmacabtagene autoleucel", "Carteyva", "relma-cel",
+      "inaticabtagene autoleucel", "CNCT19",
+      "JCAR014", "UCART19", "CART19", "CART-19", "IM19", "GC012F"
+    ]
+  },
+
+  "BCMA": {
+    "antigen_names": ["BCMA", "TNFRSF17", "CD269"],
+    "products": [
+      "idecabtagene vicleucel", "Abecma", "bb2121", "ide-cel",
+      "ciltacabtagene autoleucel", "Carvykti", "cilta-cel", "JNJ-4528", "LCAR-B38M",
+      "equecabtagene autoleucel", "Fucaso", "CT103A",
+      "zevorcabtagene autoleucel", "CT053", "zevor-cel",
+      "orvacabtagene autoleucel", "orva-cel", "JCARH125",
+      "anitocabtagene autoleucel", "anito-cel", "CART-ddBCMA",
+      "ARI0002h", "HBI0101", "GC012F"
+    ]
+  },
+
+  "CD20": {
+    "antigen_names": ["CD20"],
+    "products": ["MB-CART20.1", "C-CAR066", "LR-20"]
+  },
+
+  "CD22": {
+    "antigen_names": ["CD22"],
+    "products": ["CART22", "UCART22", "JCAR018"]
+  },
+
+  "CD30": {
+    "antigen_names": ["CD30"],
+    "products": ["ATLCAR.CD30", "CART30"]
+  },
+
+  "CD33": {
+    "antigen_names": ["CD33"],
+    "products": ["CART33"]
+  },
+
+  "CD123": {
+    "antigen_names": ["CD123", "IL3RA"],
+    "products": ["UCART123", "CART123"]
+  },
+
+  "CD7": {
+    "antigen_names": ["CD7"],
+    "products": ["WU-CART-007"]
+  },
+
+  "GPRC5D": {
+    "antigen_names": ["GPRC5D"],
+    "products": ["MCARH109", "OriCAR-017", "BMS-986393", "arlocabtagene autoleucel"]
+  },
+
+  "HER2": {
+    "antigen_names": ["HER2", "ERBB2"],
+    "products": ["CART-HER2"]
+  },
+
+  "MSLN": {
+    "antigen_names": ["MSLN", "mesothelin"],
+    "products": ["CART-meso", "huCART-meso"]
+  },
+
+  "GD2": {
+    "antigen_names": ["GD2"],
+    "products": ["GD2-CART01"]
+  },
+
+  "PSMA": {
+    "antigen_names": ["PSMA", "FOLH1", "prostate specific membrane antigen"],
+    "products": ["CART-PSMA", "P-PSMA-101"]
+  },
+
+  "EGFR": {
+    "antigen_names": ["EGFR", "EGFRvIII"],
+    "products": ["CART-EGFRvIII"]
+  },
+
+  "CLDN18.2": {
+    "antigen_names": ["CLDN18.2", "CLDN18", "claudin18.2", "claudin 18.2"],
+    "products": ["CT041", "satricabtagene autoleucel", "satri-cel", "LB1908"]
+  },
+
+  "CD70": {
+    "antigen_names": ["CD70"],
+    "products": ["CTX130", "ALLO-316"]
+  },
+
+  "CD5": {
+    "antigen_names": ["CD5"],
+    "products": []
+  },
+
+  "CD38": {
+    "antigen_names": ["CD38"],
+    "products": []
+  },
+
+  "CD138": {
+    "antigen_names": ["CD138", "SDC1"],
+    "products": []
+  },
+
+  "CLL1": {
+    "antigen_names": ["CLL1", "CLL-1", "CLEC12A"],
+    "products": []
+  },
+
+  "B7-H3": {
+    "antigen_names": ["B7-H3", "B7H3", "CD276"],
+    "products": []
+  },
+
+  "CEA": {
+    "antigen_names": ["CEA", "CEACAM5", "carcinoembryonic antigen"],
+    "products": []
+  },
+
+  "GPC3": {
+    "antigen_names": ["GPC3", "glypican-3", "glypican 3"],
+    "products": []
+  },
+
+  "MUC1": {
+    "antigen_names": ["MUC1"],
+    "products": []
+  },
+
+  "MUC16": {
+    "antigen_names": ["MUC16"],
+    "products": []
+  },
+
+  "ROR1": {
+    "antigen_names": ["ROR1"],
+    "products": ["LYL797"]
+  },
+
+  "NKG2D": {
+    "antigen_names": ["NKG2D", "NKG2DL"],
+    "products": ["CYAD-01"]
+  },
+
+  "IL13Ra2": {
+    "antigen_names": ["IL13Ra2", "IL13RA2", "IL-13Ra2"],
+    "products": []
+  },
+
+  "EpCAM": {
+    "antigen_names": ["EpCAM"],
+    "products": []
+  },
+
+  "FOLR1": {
+    "antigen_names": ["FOLR1", "folate receptor"],
+    "products": []
+  },
+
+  "BAFF-R": {
+    "antigen_names": ["BAFF-R", "BAFFR", "TNFRSF13C"],
+    "products": []
+  },
+
+  "DLL3": {
+    "antigen_names": ["DLL3"],
+    "products": ["AMG 119"]
+  },
+
+  "PSCA": {
+    "antigen_names": ["PSCA"],
+    "products": []
+  }
+}

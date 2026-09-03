@@ -1,0 +1,107 @@
+{
+  "_comment": "ClinicalTrials.gov condition names are free text, so we group them into a few broad indications. The groups are checked from top to bottom, so the first group whose keyword appears in the condition text wins. That is why 'Multiple Myeloma' comes before 'Leukemia' and 'Lymphoma'. Autoimmune disease is included because CAR-T is now also tested outside oncology (lupus, systemic sclerosis).",
+
+  "Multiple Myeloma": [
+    "multiple myeloma",
+    "plasma cell myeloma",
+    "plasma cell leukemia",
+    "myeloma"
+  ],
+
+  "Leukemia": [
+    "leukemia",
+    "leukaemia",
+    "lymphoblastic",
+    "myelodysplastic",
+    "t-all",
+    "b-all",
+    "aml",
+    "cll",
+    "cml",
+    "sll"
+  ],
+
+  "Lymphoma": [
+    "lymphoma",
+    "hodgkin",
+    "dlbcl",
+    "lbcl",
+    "nhl",
+    "ptcl",
+    "mantle cell",
+    "follicular",
+    "waldenstrom"
+  ],
+
+  "Autoimmune Disease": [
+    "autoimmune",
+    "lupus",
+    "sle",
+    "systemic sclerosis",
+    "scleroderma",
+    "rheumatoid arthritis",
+    "multiple sclerosis",
+    "sjogren",
+    "myositis",
+    "myopathy",
+    "myasthenia",
+    "nephropathy",
+    "nephritis",
+    "type 1 diabetes",
+    "crohn",
+    "colitis",
+    "pemphigus",
+    "vasculitis",
+    "anca",
+    "graves",
+    "inflammatory bowel",
+    "connective tissue",
+    "immune thrombocytopenia",
+    "immune-mediated"
+  ],
+
+  "Solid Tumor": [
+    "solid tumor",
+    "solid tumour",
+    "carcinoma",
+    "sarcoma",
+    "glioma",
+    "glioblastoma",
+    "melanoma",
+    "neuroblastoma",
+    "mesothelioma",
+    "brain tumor",
+    "breast",
+    "lung",
+    "gastric",
+    "pancrea",
+    "ovarian",
+    "prostate",
+    "colorectal",
+    "colon cancer",
+    "hepatocellular",
+    "liver cancer",
+    "renal",
+    "kidney cancer",
+    "hcc",
+    "germ cell tumor",
+    "rhabdoid",
+    "metasta",
+    "neoplasm",
+    "cancer"
+  ],
+
+  "Other Blood Cancer": [
+    "b-cell malignanc",
+    "b cell malignanc",
+    "hematologic malignanc",
+    "hematological malignanc",
+    "haematological malignanc",
+    "hematolymphoid",
+    "myeloid malignanc",
+    "hematologic disease",
+    "hematological disease",
+    "plasma cell dyscrasia",
+    "amyloidosis"
+  ]
+}
