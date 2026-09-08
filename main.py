@@ -1,9 +1,115 @@
 from datetime import date
+import math
 
 import pandas as pd
 import plotly.express as px
 import streamlit as st
 from cart_data import ANTIGEN_LIST, filter_trials, get_trials
+
+# ClinicalTrials.gov country names -> ISO-3 codes for the bubble map.
+COUNTRY_TO_ISO3 = {
+    "United States": "USA",
+    "China": "CHN",
+    "Germany": "DEU",
+    "France": "FRA",
+    "United Kingdom": "GBR",
+    "Italy": "ITA",
+    "Spain": "ESP",
+    "Canada": "CAN",
+    "Japan": "JPN",
+    "Korea, Republic of": "KOR",
+    "Australia": "AUS",
+    "Netherlands": "NLD",
+    "Belgium": "BEL",
+    "Switzerland": "CHE",
+    "Israel": "ISR",
+    "Poland": "POL",
+    "Sweden": "SWE",
+    "Austria": "AUT",
+    "Denmark": "DNK",
+    "Norway": "NOR",
+    "Finland": "FIN",
+    "Brazil": "BRA",
+    "India": "IND",
+    "Singapore": "SGP",
+    "Taiwan": "TWN",
+    "Hong Kong": "HKG",
+    "Russian Federation": "RUS",
+    "Mexico": "MEX",
+    "Argentina": "ARG",
+    "Turkey": "TUR",
+    "Greece": "GRC",
+    "Portugal": "PRT",
+    "Ireland": "IRL",
+    "Czech Republic": "CZE",
+    "Czechia": "CZE",
+    "Hungary": "HUN",
+    "Romania": "ROU",
+    "Ukraine": "UKR",
+    "South Africa": "ZAF",
+    "New Zealand": "NZL",
+    "Thailand": "THA",
+    "Malaysia": "MYS",
+    "Egypt": "EGY",
+    "Chile": "CHL",
+    "Colombia": "COL",
+    "Saudi Arabia": "SAU",
+    "United Arab Emirates": "ARE",
+    "Pakistan": "PAK",
+    "Bangladesh": "BGD",
+    "Philippines": "PHL",
+    "Indonesia": "IDN",
+    "Vietnam": "VNM",
+    "Viet Nam": "VNM",
+    "Nigeria": "NGA",
+    "Kenya": "KEN",
+    "Morocco": "MAR",
+    "Tunisia": "TUN",
+    "Lebanon": "LBN",
+    "Jordan": "JOR",
+    "Serbia": "SRB",
+    "Croatia": "HRV",
+    "Slovenia": "SVN",
+    "Slovakia": "SVK",
+    "Bulgaria": "BGR",
+    "Lithuania": "LTU",
+    "Latvia": "LVA",
+    "Estonia": "EST",
+    "Iceland": "ISL",
+    "Luxembourg": "LUX",
+    "Georgia": "GEO",
+    "Armenia": "ARM",
+    "Kazakhstan": "KAZ",
+    "Belarus": "BLR",
+    "Peru": "PER",
+    "Ecuador": "ECU",
+    "Uruguay": "URY",
+    "Costa Rica": "CRI",
+    "Panama": "PAN",
+    "Puerto Rico": "PRI",
+    "Iran, Islamic Republic of": "IRN",
+    "Iraq": "IRQ",
+    "Algeria": "DZA",
+    "Ghana": "GHA",
+    "Uganda": "UGA",
+    "Tanzania, United Republic of": "TZA",
+    "Ethiopia": "ETH",
+    "Bosnia and Herzegovina": "BIH",
+    "North Macedonia": "MKD",
+    "Albania": "ALB",
+    "Moldova, Republic of": "MDA",
+    "Cyprus": "CYP",
+    "Malta": "MLT",
+    "Qatar": "QAT",
+    "Kuwait": "KWT",
+    "Oman": "OMN",
+    "Bahrain": "BHR",
+    "Sri Lanka": "LKA",
+    "Nepal": "NPL",
+    "Cambodia": "KHM",
+    "Myanmar": "MMR",
+    "Macao": "MAC",
+}
 
 # ==============================================================================
 # 1. PAGE CONFIGURATION & DATA INITIALIZATION
@@ -166,28 +272,67 @@ if not filtered_df.empty:
         yaxis_title="",
     )
 
-    # --- Chart 4: Top Geographic Regions (Horizontal Bar Chart) ---
+    # --- Chart 4: Geographic Distribution (Country Bubbles) ---
     country_counts = (
         filtered_df[filtered_df["Main Country"] != "Unknown"]["Main Country"]
         .value_counts()
-        .head(8)
         .reset_index()
     )
     country_counts.columns = ["Country", "Count"]
+    country_counts["iso_alpha"] = country_counts["Country"].map(COUNTRY_TO_ISO3)
+    country_counts = country_counts.dropna(subset=["iso_alpha"])
+    # Log scale mapped to a small pixel range so China/USA stay
+    # larger without covering the rest of the map.
+    if country_counts.empty:
+        country_counts["pixel_size"] = pd.Series(dtype=float)
+    else:
+        log_count = country_counts["Count"].map(math.log10)
+        log_span = float(log_count.max() - log_count.min())
+        if log_span == 0:
+            country_counts["pixel_size"] = 12.0
+        else:
+            country_counts["pixel_size"] = (
+                8 + 12 * (log_count - log_count.min()) / log_span
+            )
 
-    fig_country = px.bar(
+    fig_country = px.scatter_geo(
         country_counts,
-        x="Count",
-        y="Country",
-        orientation="h",
-        title="Top Countries",
+        locations="iso_alpha",
+        color="Count",
+        hover_name="Country",
+        hover_data={"iso_alpha": False, "Count": True, "pixel_size": False},
+        projection="natural earth",
+        title="Trials by Country",
         template="plotly_white",
+        color_continuous_scale=[
+            [0.0, "#fc9272"],
+            [0.5, "#ef3b2c"],
+            [1.0, "#99000d"],
+        ],
+    )
+    if not country_counts.empty:
+        fig_country.update_traces(
+            marker=dict(
+                size=country_counts["pixel_size"].tolist(),
+                sizemode="diameter",
+                sizeref=1,
+                opacity=0.75,
+                line=dict(width=0.8, color="white"),
+            )
+        )
+    fig_country.update_geos(
+        showcountries=True,
+        showcoastlines=True,
+        showland=True,
+        landcolor="rgb(243, 243, 243)",
+        countrycolor="rgb(204, 204, 204)",
+        showframe=False,
     )
     fig_country.update_layout(
         title_x=0.5,
-        xaxis_title="Number of Trials",
-        yaxis_title="",
-        yaxis={"categoryorder": "total ascending"},
+        margin=dict(l=0, r=0, t=50, b=0),
+        coloraxis_colorbar=dict(title="Trials"),
+        height=450,
     )
 
     # --- Chart 5: Trial Status (Horizontal Bar Chart) ---
@@ -243,9 +388,7 @@ if not filtered_df.empty:
     with col4:
         st.plotly_chart(fig_status, width="stretch")
 
-    col5, col6 = st.columns(2)
-    with col5:
-        st.plotly_chart(fig_country, width="stretch")
+    st.plotly_chart(fig_country, width="stretch")
 
 else:
     # Fallback state for empty filter results
