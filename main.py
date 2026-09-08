@@ -4,12 +4,7 @@ import math
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-from cart_data import (
-    ANTIGEN_LIST,
-    filter_trials,
-    get_available_indications,
-    get_trials,
-)
+from cart_data import ANTIGEN_LIST, filter_trials, get_available_indications, get_trials
 
 # ClinicalTrials.gov country names -> ISO-3 codes for the bubble map.
 COUNTRY_TO_ISO3 = {
@@ -135,22 +130,22 @@ st.sidebar.header("🔍 Filter Options")
 # --- Filter 1: Target Antigen ---
 antigens = ["All"] + sorted(ANTIGEN_LIST)
 selected_ant = st.sidebar.selectbox("Select Target Antigen:", options=antigens)
+antigen_filter = None if selected_ant == "All" else selected_ant
 
 # --- Filter 2: Cancer Indication ---
-if selected_ant != "All":
-    available_inds = get_available_indications(df, target=selected_ant)
-else:
-    available_inds = sorted(df["Indication"].dropna().unique())
-
-indications = ["All"] + available_inds
+# Options come from get_available_indications so the menu only lists
+# indications that exist for the selected antigen.
+indications = ["All"] + [
+    str(i)
+    for i in get_available_indications(df, antigen_filter)
+    if pd.notna(i)
+]
 selected_ind = st.sidebar.selectbox(
     "Select Cancer Indication:", options=indications
 )
 
-# Step 2 Subsetting: Apply filters to get final dataset
-target_filter = None if selected_ant == "All" else selected_ant
 ind_filter = None if selected_ind == "All" else selected_ind
-filtered_df = filter_trials(df, target=target_filter, indication=ind_filter)
+filtered_df = filter_trials(df, target=antigen_filter, indication=ind_filter)
 
 # Summary banner for active filter combination
 st.markdown(
