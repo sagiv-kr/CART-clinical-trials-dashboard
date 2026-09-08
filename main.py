@@ -4,7 +4,12 @@ import math
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-from cart_data import ANTIGEN_LIST, filter_trials, get_trials
+from cart_data import (
+    ANTIGEN_LIST,
+    filter_trials,
+    get_available_indications,
+    get_trials,
+)
 
 # ClinicalTrials.gov country names -> ISO-3 codes for the bubble map.
 COUNTRY_TO_ISO3 = {
@@ -131,23 +136,21 @@ st.sidebar.header("🔍 Filter Options")
 antigens = ["All"] + sorted(ANTIGEN_LIST)
 selected_ant = st.sidebar.selectbox("Select Target Antigen:", options=antigens)
 
-# Step 1 Subsetting: Filter dataset by Antigen to populate Indication options dynamically
-if selected_ant != "All":
-    df_antigen_filtered = filter_trials(df, target=selected_ant)
-else:
-    df_antigen_filtered = df.copy()
-
 # --- Filter 2: Cancer Indication ---
-indications = ["All"] + sorted(
-    [str(i) for i in df_antigen_filtered["Indication"].dropna().unique()]
-)
+if selected_ant != "All":
+    available_inds = get_available_indications(df, target=selected_ant)
+else:
+    available_inds = sorted(df["Indication"].dropna().unique())
+
+indications = ["All"] + available_inds
 selected_ind = st.sidebar.selectbox(
     "Select Cancer Indication:", options=indications
 )
 
-# Step 2 Subsetting: Apply Indication filter directly on the Antigen-filtered subset
+# Step 2 Subsetting: Apply filters to get final dataset
+target_filter = None if selected_ant == "All" else selected_ant
 ind_filter = None if selected_ind == "All" else selected_ind
-filtered_df = filter_trials(df_antigen_filtered, indication=ind_filter)
+filtered_df = filter_trials(df, target=target_filter, indication=ind_filter)
 
 # Summary banner for active filter combination
 st.markdown(
@@ -281,8 +284,7 @@ if not filtered_df.empty:
     country_counts.columns = ["Country", "Count"]
     country_counts["iso_alpha"] = country_counts["Country"].map(COUNTRY_TO_ISO3)
     country_counts = country_counts.dropna(subset=["iso_alpha"])
-    # Log scale mapped to a small pixel range so China/USA stay
-    # larger without covering the rest of the map.
+    
     if country_counts.empty:
         country_counts["pixel_size"] = pd.Series(dtype=float)
     else:
