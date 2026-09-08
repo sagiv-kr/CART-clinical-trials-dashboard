@@ -410,7 +410,7 @@ st.dataframe(
         "Start Year",
         "Link"
     ]],
-    width="stretch",
+    use_container_width=True,
     hide_index=True,
     column_config={
         "Link": st.column_config.LinkColumn(
