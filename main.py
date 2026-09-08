@@ -279,8 +279,7 @@ if not filtered_df.empty:
     country_counts.columns = ["Country", "Count"]
     country_counts["iso_alpha"] = country_counts["Country"].map(COUNTRY_TO_ISO3)
     country_counts = country_counts.dropna(subset=["iso_alpha"])
-    # Log scale mapped to a small pixel range so China/USA stay
-    # larger without covering the rest of the map.
+    
     if country_counts.empty:
         country_counts["pixel_size"] = pd.Series(dtype=float)
     else:
