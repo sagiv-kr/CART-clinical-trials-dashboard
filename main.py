@@ -122,32 +122,14 @@ st.set_page_config(
     page_icon=str(LOGO_PATH),
     layout="wide",
 )
-st.logo(str(LOGO_PATH), size="large")
+# Small icon when the sidebar is collapsed; the large mark is st.sidebar.image below.
+st.logo(str(LOGO_PATH), icon_image=str(LOGO_PATH))
 st.markdown(
     """
     <style>
     div[data-testid="stImage"] img { border-radius: 50%; }
     div[data-testid="stImage"] button { display: none; }
-    section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] {
-        height: auto !important;
-        min-height: 228px !important;
-        padding-top: 1.1rem;
-        padding-bottom: 0.6rem;
-        position: relative;
-        justify-content: center !important;
-    }
-    [data-testid="stSidebarCollapseButton"] {
-        position: absolute !important;
-        top: 0.45rem;
-        right: 0.35rem;
-    }
-    img[data-testid="stSidebarLogo"] {
-        height: 200px !important;
-        width: 200px !important;
-        max-height: none !important;
-        border-radius: 50%;
-        object-fit: cover;
-    }
+    img[data-testid="stSidebarLogo"] { display: none; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -166,6 +148,7 @@ with title_col:
 # ==============================================================================
 # 2. SIDEBAR FILTERS (SEQUENTIAL FILTERING PIPELINE)
 # ==============================================================================
+st.sidebar.image(str(LOGO_PATH), width=200)
 st.sidebar.header("🔍 Filter Options")
 
 # --- Filter 1: Target Antigen ---
