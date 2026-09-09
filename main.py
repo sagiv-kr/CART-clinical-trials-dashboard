@@ -344,6 +344,17 @@ if not filtered_df.empty:
         "Withdrawn",
         "Unknown status",
     ]
+    status_colors = {
+        "Not yet recruiting": "#FF7F0E",
+        "Recruiting": "#1F77B4",
+        "Enrolling by invitation": "#1F77B4",
+        "Active, not recruiting": "#2CA02C",
+        "Completed": "#7F8C8D",
+        "Suspended": "#D62728",
+        "Terminated": "#D62728",
+        "Withdrawn": "#D62728",
+        "Unknown status": "#C7C7C7",
+    }
     status_counts = filtered_df["Status"].value_counts().reset_index()
     status_counts.columns = ["Status", "Count"]
     present_statuses = [
@@ -354,6 +365,10 @@ if not filtered_df.empty:
         for status in status_counts["Status"]
         if status not in present_statuses
     ]
+    for status in extra_statuses:
+        status_colors.setdefault(status, "#C7C7C7")
+    ordered_statuses = present_statuses + extra_statuses
+
     fig_status = px.bar(
         status_counts,
         x="Count",
@@ -361,13 +376,19 @@ if not filtered_df.empty:
         orientation="h",
         title="Trial Status",
         template="plotly_white",
-        category_orders={"Status": present_statuses + extra_statuses},
+        color="Status",
+        color_discrete_map=status_colors,
+        category_orders={"Status": ordered_statuses},
     )
     fig_status.update_layout(
         title_x=0.5,
         xaxis_title="Number of Trials",
         yaxis_title="",
-        yaxis={"categoryorder": "array", "categoryarray": list(reversed(present_statuses + extra_statuses))},
+        showlegend=False,
+        yaxis={
+            "categoryorder": "array",
+            "categoryarray": list(reversed(ordered_statuses)),
+        },
     )
 
     # ==========================================================================
@@ -395,10 +416,27 @@ else:
 # 6. RAW DATA INSPECTION TABLE
 # ==============================================================================
 st.divider()
-st.subheader("📋 Raw Trial Details")
+st.subheader("Clinical Trials")
+
+search_term = st.text_input(
+    "Search trials",
+    placeholder="Search any keyword across all fields",
+)
+table_df = filtered_df
+if search_term.strip():
+    query = search_term.strip()
+    match_any_field = pd.Series(False, index=filtered_df.index)
+    for column in filtered_df.columns:
+        match_any_field = match_any_field | filtered_df[column].fillna("").astype(
+            str
+        ).str.contains(query, case=False, regex=False)
+    table_df = filtered_df[match_any_field]
+
+if search_term.strip():
+    st.caption(f"{len(table_df):,} matching trials")
 
 st.dataframe(
-    filtered_df[[
+    table_df[[
         "NCT ID",
         "Title",
         "Target Antigen",
