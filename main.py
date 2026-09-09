@@ -1,5 +1,6 @@
 from datetime import date
 from pathlib import Path
+import base64
 import math
 
 import pandas as pd
@@ -8,6 +9,10 @@ import streamlit as st
 from cart_data import ANTIGEN_LIST, filter_trials, get_available_indications, get_trials
 
 LOGO_PATH = Path(__file__).parent / "logo.png"
+LOGO_DATA_URI = (
+    "data:image/png;base64,"
+    + base64.b64encode(LOGO_PATH.read_bytes()).decode("ascii")
+)
 
 # ClinicalTrials.gov country names -> ISO-3 codes for the bubble map.
 COUNTRY_TO_ISO3 = {
@@ -122,14 +127,15 @@ st.set_page_config(
     page_icon=str(LOGO_PATH),
     layout="wide",
 )
-# Small icon when the sidebar is collapsed; the large mark is st.sidebar.image below.
-st.logo(str(LOGO_PATH), icon_image=str(LOGO_PATH))
 st.markdown(
     """
     <style>
     div[data-testid="stImage"] img { border-radius: 50%; }
     div[data-testid="stImage"] button { display: none; }
-    img[data-testid="stSidebarLogo"] { display: none; }
+    section[data-testid="stSidebar"] [data-testid="stImage"] {
+        display: flex;
+        justify-content: center;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -148,7 +154,15 @@ with title_col:
 # ==============================================================================
 # 2. SIDEBAR FILTERS (SEQUENTIAL FILTERING PIPELINE)
 # ==============================================================================
-st.sidebar.image(str(LOGO_PATH), width=200)
+st.sidebar.markdown(
+    f"""
+    <div style="display:flex;justify-content:center;margin:0.4rem 0 0.8rem;">
+        <img src="{LOGO_DATA_URI}" alt="CAR-T Clinical Trial Landscape logo"
+             width="200" style="border-radius:50%;display:block;" />
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 st.sidebar.header("🔍 Filter Options")
 
 # --- Filter 1: Target Antigen ---
