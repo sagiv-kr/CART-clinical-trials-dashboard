@@ -219,6 +219,9 @@ __marimo__/
 # Keep data/car_t_targets.json and data/indication_groups.json in git.
 data/cart_trials.csv
 
+# Local-only notes; keep on disk but do not publish
+DATA_README.md
+
 # OS files
 .DS_Store
 Thumbs.db
