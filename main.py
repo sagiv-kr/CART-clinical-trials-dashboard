@@ -1,10 +1,13 @@
 from datetime import date
+from pathlib import Path
 import math
 
 import pandas as pd
 import plotly.express as px
 import streamlit as st
 from cart_data import ANTIGEN_LIST, filter_trials, get_available_indications, get_trials
+
+LOGO_PATH = Path(__file__).parent / "logo.png"
 
 # ClinicalTrials.gov country names -> ISO-3 codes for the bubble map.
 COUNTRY_TO_ISO3 = {
@@ -114,13 +117,51 @@ COUNTRY_TO_ISO3 = {
 # ==============================================================================
 # 1. PAGE CONFIGURATION & DATA INITIALIZATION
 # ==============================================================================
-st.set_page_config(page_title="CAR-T Clinical Trial Landscape", layout="wide")
+st.set_page_config(
+    page_title="CAR-T Clinical Trial Landscape",
+    page_icon=str(LOGO_PATH),
+    layout="wide",
+)
+st.logo(str(LOGO_PATH), size="large")
+st.markdown(
+    """
+    <style>
+    div[data-testid="stImage"] img { border-radius: 50%; }
+    div[data-testid="stImage"] button { display: none; }
+    section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] {
+        height: auto !important;
+        min-height: 228px !important;
+        padding-top: 1.1rem;
+        padding-bottom: 0.6rem;
+        position: relative;
+        justify-content: center !important;
+    }
+    [data-testid="stSidebarCollapseButton"] {
+        position: absolute !important;
+        top: 0.45rem;
+        right: 0.35rem;
+    }
+    img[data-testid="stSidebarLogo"] {
+        height: 200px !important;
+        width: 200px !important;
+        max-height: none !important;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Load clinical trial dataset
 df = get_trials()
 
 # Page Header
-st.title("🛡️ CAR-T Clinical Trial Landscape")
+logo_col, title_col = st.columns([1, 12], vertical_alignment="center")
+with logo_col:
+    st.image(str(LOGO_PATH), width=88)
+with title_col:
+    st.title("CAR-T Clinical Trial Landscape")
 
 # ==============================================================================
 # 2. SIDEBAR FILTERS (SEQUENTIAL FILTERING PIPELINE)
