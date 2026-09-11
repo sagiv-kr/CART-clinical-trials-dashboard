@@ -11,7 +11,7 @@ Data are retrieved with a broad ClinicalTrials.gov search, then classified using
 - **Local app:** [http://localhost:8501](http://localhost:8501)
 - **Hosted app:** [https://cart-clinical-trials-dashboard-dgn9rjbwqwxhefa3unxndf.streamlit.app/](https://cart-clinical-trials-dashboard-dgn9rjbwqwxhefa3unxndf.streamlit.app/)
 
-### Built With
+## Built With
 * **Language:** Python 3.11+
 * **Framework:** Streamlit
 * **Data & Analytics:** Pandas, NumPy
